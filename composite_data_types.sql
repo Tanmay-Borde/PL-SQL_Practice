@@ -565,5 +565,153 @@ begin
 end;
 
 
+-- To create a new table with data from selected columns of anther table
+create table departments as select department_id, department_name from employees_copy;
+
+declare
+  cursor c_emps is select first_name,last_name from employees_copy;
+  v_first_name employees_copy.first_name%type;
+  v_last_name employees_copy.last_name%type;
+begin
+  open c_emps;
+  fetch c_emps into v_first_name,v_last_name;
+  fetch c_emps into v_first_name,v_last_name;
+  fetch c_emps into v_first_name,v_last_name;
+  dbms_output.put_line(v_first_name|| ' ' || v_last_name);
+  fetch c_emps into v_first_name,v_last_name;
+  dbms_output.put_line(v_first_name|| ' ' || v_last_name);
+  close c_emps;
+end;
+--------------- cursor with join example
+declare
+  cursor c_emps is select first_name,last_name, department_name from employees_copy
+                      join departments using (department_id)
+                      where department_id between 30 and 60;
+  v_first_name employees_copy.first_name%type;
+  v_last_name employees_copy.last_name%type;
+  v_department_name departments.department_name%type;
+begin
+  open c_emps;
+  fetch c_emps into v_first_name, v_last_name,v_department_name;
+  dbms_output.put_line(v_first_name|| ' ' || v_last_name|| ' in the department of '|| v_department_name);
+  close c_emps;
+end;
+
+
+declare
+    type r_emp is record(v_first_name employees_copy.first_name%type, v_last_name employees_copy.last_name%type);
+    v_emp r_emp;
+    cursor c_emps is select first_name, last_name from employees_copy;
+begin
+    open c_emps;
+    fetch c_emps into v_emp;
+    dbms_output.put_line(v_emp.v_first_name||' '||v_emp.v_last_name);
+    close c_emps;
+end;
+
+------- An example for using cursors table rowtype --------
+
+declare
+    v_emp employees_copy%rowtype;
+    cursor c_emps is select first_name, last_name from employees_copy;
+begin
+    open c_emps;
+    fetch c_emps into v_emp.first_name, v_emp.last_name;
+    dbms_output.put_line(v_emp.first_name||' '||v_emp.last_name);
+    close c_emps;
+end;
+
+-------- An example for using cursors with cursor%rowtype --------
+declare
+    cursor c_emps is select first_name, last_name from employees_copy;
+    v_emp c_emps%rowtype;
+begin
+    open c_emps;
+    fetch c_emps into v_emp.first_name, v_emp.last_name;
+    dbms_output.put_line(v_emp.first_name||' '||v_emp.last_name);
+    close c_emps;
+end;
+
+-------- LOOPING WITH CURSORS ------------
+-- THIS GOES INTO INFINITE LOOP DUE TO MISSING UPPER LIMIT OR NOT FOUND CONDITION
+declare
+  CURSOR C_EMPS IS SELECT * FROM EMPLOYEES_COPY WHERE department_id = 30;
+  V_EMPS C_EMPS%rowtype;
+BEGIN
+  OPEN C_EMPS;
+  LOOP
+    FETCH C_EMPS INTO V_EMPS;
+    dbms_output.put_line(V_EMPS.employee_id|| ' ' || V_EMPS.first_name || ' ' || V_EMPS.LAST_NAME);
+    END LOOP;
+  CLOSE C_EMPS;
+END;
+
+-- NOTFOUND EXAMPLE
+DECLARE
+  CURSOR C_EMPS IS SELECT * FROM EMPLOYEES_COPY WHERE DEPARTMENT_ID = 30;
+  V_EMPS C_EMPS%ROWTYPE;
+BEGIN
+  OPEN C_EMPS;
+  LOOP
+    FETCH C_EMPS INTO V_EMPS;
+    EXIT WHEN C_EMPS%NOTFOUND;
+    dbms_output.put_line(V_EMPS.employee_id||' '||V_EMPS.first_name||V_EMPS.LAST_NAME);
+    END LOOP;
+  CLOSE C_EMPS;
+END;
+
+-- WHILE LOOP EXAMPLE
+
+---------------while loop example
+declare
+  cursor c_emps is select * from EMPLOYEES_COPY where department_id = 30;
+  v_emps c_emps%rowtype;
+begin
+  open c_emps;
+  fetch c_emps into v_emps;
+  while c_emps%found loop
+    dbms_output.put_line(v_emps.employee_id|| ' ' ||v_emps.first_name|| ' ' ||v_emps.last_name);
+    fetch c_emps into v_emps;
+    --exit when c_emps%notfound;
+  end loop;
+  close c_emps;
+end;
+
+-- FOR LOOP WITH CURSOR EXAMPLE --
+DECLARE
+  CURSOR C_EMPS IS SELECT * FROM EMPLOYEES_COPY WHERE DEPARTMENT_ID = 30;
+  V_EMPS C_EMPS%ROWTYPE;
+BEGIN
+  OPEN C_EMPS;
+  FOR I IN 1..6 LOOP
+    FETCH C_EMPS INTO V_EMPS;
+    dbms_output.put_line(V_EMPS.employee_id||' '||V_EMPS.first_name||' '||V_EMPS.LAST_NAME);
+    END LOOP;
+  CLOSE C_EMPS;
+END;
+
+-- FOR..IN CLAUSE EXAMPLE
+DECLARE
+  CURSOR C_EMPS IS SELECT * FROM EMPLOYEES_COPY WHERE DEPARTMENT_ID = 30;
+BEGIN
+  FOR I IN C_EMPS LOOP
+    dbms_output.put_line(I.employee_id||' '||I.first_name||' '||I.LAST_NAME);
+  END LOOP;
+END;
+
+-- FOR..IN WITH SELECT EXAMPLE
+BEGIN
+  FOR I IN (SELECT * FROM EMPLOYEES_COPY WHERE DEPARTMENT_ID = 30) LOOP
+    dbms_output.put_line(I.employee_id||' '||I.first_name||' '||I.LAST_NAME);
+  END LOOP;
+END;
+
+
+
+
+
+
+
+
 
 
