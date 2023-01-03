@@ -1,0 +1,16 @@
+---- PLSQL Functions ----
+- SUBSTR( string, start_position [, length ] )
+- Parameters or Arguments:
+- string : The source string.
+- start_position : The starting position for extraction. The first position in the string is always 1.
+- length : Optional. It is the number of characters to extract. If this parameter is omitted, the SUBSTR function will return the entire string.
+ex.:
+    L_CHR_SRC_PO_CODE1 := SUBSTR (P_PO_ADDRESS_REC.POSTAL_CODE, 1, 5);
+
+- LOVs (List Of Values) : pre-defined set/list of values/records.
+    - ex: list of districts of a state.
+
+- LookUp : stores custom data/information in the form of table which is updatable.
+
+- INTO clause should be used for single row query.
+- THe 'BULK COLLECT INTO' or 'OPEN FOR' clause is used for multiple-row queries.

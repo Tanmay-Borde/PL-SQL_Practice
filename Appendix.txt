@@ -1,0 +1,96 @@
+Hi Dear Friends,
+
+One of the most common problems of this course is about connecting with the HR Schema.   
+
+With the Oracle Database 12c, there is a "container database" property, and when you install the Oracle Database without unchecking it, you will face HR user problems.
+
+If you read this text before you installed the database, you need to uncheck the "Create as Container Database" option to avoid that.
+
+But anyway, if you have installed the database without unchecking this option, there are 2 ways to connect with the HR user.   
+
+1) You must follow these instructions below:   
+
+1.1) Run command prompt (in Windows) or terminal (in Linux) and type in:
+
+ sqlplus / as sysdba    
+
+(If you cannot connect with this code above, then, that means, your database does not work. So please go to the "Services" and make sure that OracleServiceORA12C running)
+
+1.2) After that, please run this code.   
+
+alter user hr identified by hr account unlock;    
+
+And try to connect to the database to the SQL Developer and the HR user.   
+
+2)  Even if the user exists in the software, it can be thought of as it is not in your Database. I recommend that you don't think about this. This is a bit advanced subject. So you can create it and use it with your database.     
+
+2.1) So, connect with the system user as I mentioned in the videos and then run the codes below with the given order.   
+
+create user hr identified by hr;    
+
+When you run this code above, then, the user will be created.
+
+2.2) Now, you need to grant its permissions by running this script below:
+
+GRANT CREATE SESSION, ALTER SESSION, CREATE DATABASE LINK, CREATE MATERIALIZED VIEW, CREATE PROCEDURE, CREATE PUBLIC SYNONYM, CREATE TABLE, CREATE VIEW, UNLIMITED TABLESPACE TO HR.
+
+✮Now, you are ready for the course.✮ 
+
+Once those have been granted, then, you can connect to the database as shown in the "Configuring and Using the SQL Developer" lecture.     
+
+However, if you can not succeed anyway, you need to uninstall the database and re-install it by unchecking the "Create as Container Database" option or you can try to get the database with other methods we provide you (like the Virtual Machine method or Oracle Live SQL method, etc.).
+
+If you finished the course and will not use that database further, or a problem occurred while installing it, and you need to remove the problematic one, here are the steps that you need to follow to remove the Oracle database completely from your Windows PC:
+
+1) Stop Oracle* services:
+
+Press Windows key, type services, stop all Oracle-related services.
+
+
+2) Delete Oracle* registry keys
+
+Press Windows key, type regedit, delete the following Windows registry keys if it exists. :
+
+2.1 HKEY_LOCAL_MACHINE/SOFTWARE/Oracle*
+
+
+2.2 HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Oracle* (64-bits Windows)
+
+
+2.3) HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Services/Oracle*
+
+
+3) Reboot Windows.
+
+4) Delete Oracle* folders.
+
+Delete the following Oracle* folders and files if it exists.
+
+C:\OracleApp or ORACLE_HOME
+
+C:\Program Files\OracleApp
+
+C:\Program Files (x86)\Oracle
+
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ Oracle-related folders.
+
+C:\Users Oracle-related folders.
+
+Empty C:\temp and recycle bin.
+
+Done. Once you completed the steps above, the Oracle database will be uninstalled from your Windows operating system completely.
+
+
+We see that some students get the database with the first option(Option 1 - Installing the VirtualBox or VMware and import the image), but continue with the Option 2(Installing the database directly).
+
+But this is not necessary. These are just different options for you to get the database. If you got the database with one of the options in this section, you don't need to follow the other option.
+
+So, if you could get the database with the Option 1, please skip the rest of the lectures of this section. You can continue with the Lecture 28 and further.
+
+Final Note:
+If you are using the virtual image option(Option-1), you may realize that there is a tiny difference between the data on your database and the lectures here. To make them equal, please connect with the HR user, and execute the following code only for once.
+
+UPDATE hr.employees SET hire_date = hire_date + INTERVAL '8' YEAR;
+UPDATE hr.employees SET hire_date = hire_date + INTERVAL '8' YEAR WHERE hire_date <'01-JAN-00';
+COMMIT;
+

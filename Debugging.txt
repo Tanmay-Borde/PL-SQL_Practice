@@ -1,0 +1,27 @@
+dbms_debug package
+JDWP - Java Debug Wire Protocol
+
+- Do not debug in Production Env.
+- SQL Developer by default adds a rollback at the end in order to rollback all the changes made to DB during the debug.
+- 'Run untill a breakpoint occurs' setting makes the debug execution stop only to a breakpoint.
+- To enable the debugger to create a seperate anonymous_block, select 'step into' in preferance to debug the code make the debugger stop at first line and then add breakpoints.
+
+demo:
+/***************** The Complete PL/SQL Bootcamp ********************
+ * Author  : Oracle Master Training                                *
+ * Course  : The Complete Oracle PL/SQL Bootcamp                   *
+ * Lecture : Debugging the Anonymous Blocks                        *
+ *******************************************************************/
+DECLARE
+  CURSOR c_emps IS 
+  SELECT * FROM employees_copy;
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Update started at : '|| systimestamp);
+    FOR r_emp IN c_emps LOOP
+        IF NVL(r_emp.commission_pct,0) = 0 THEN
+            UPDATE employees_copy SET commission_pct = 0.3 WHERE employee_id = r_emp.employee_id;
+        end if;
+    END LOOP;
+ dbms_output.put_line('Update finished at : '|| systimestamp);
+ ROLLBACK;
+END;
