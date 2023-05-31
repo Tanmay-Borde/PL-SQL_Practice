@@ -1,0 +1,252 @@
+- Basic concepts of Oracle:-
+
+Sure! Here's an overview of the key data types, structures, and collection concepts in Oracle:
+
+1. Scalar Data Types:
+   - NUMBER: Represents numeric data, including integers and floating-point numbers.
+   - VARCHAR2/CHAR: Used to store character data, with VARCHAR2 being variable-length and CHAR being fixed-length.
+   - DATE: Stores date and time values.
+   - BOOLEAN: Represents boolean values (TRUE or FALSE).
+   - BINARY_INTEGER: Used for integer values.
+
+2. Composite Data Types:
+   - RECORD/ROW: Represents a collection of related attributes.
+   - TABLE: Represents a collection of rows with the same structure.
+
+3. User-Defined Object Types:
+   - OBJECT: Allows you to define custom data structures with attributes and methods.
+   - TABLE OF: Defines a collection of elements of a specific type.
+
+4. Collections:
+   - VARRAY: Variable-length arrays with a fixed size.
+   - NESTED TABLE: Dynamic-size arrays that can be stored as columns in a table.
+   - INDEX BY TABLE: Associative arrays indexed by a key.
+
+5. Cursors:
+   - IMPLICIT: Automatically created for SELECT statements in PL/SQL.
+   - EXPLICIT: Declared explicitly using the CURSOR keyword.
+
+6. PL/SQL Control Structures:
+   - IF-THEN-ELSE: Conditionally executes blocks of code.
+   - LOOP: Repeats a block of code until a condition is met.
+   - FOR LOOP: Iterates over a specific range or a collection.
+   - WHILE LOOP: Repeats a block of code while a condition is true.
+   - EXIT: Terminates a loop prematurely.
+
+7. Exception Handling:
+   - TRY-CATCH: Used to handle exceptions and perform error handling.
+   - EXCEPTION WHEN: Catches specific exceptions and executes corresponding code.
+
+8. Procedures and Functions:
+   - PROCEDURE: A named block of code that performs a specific task.
+   - FUNCTION: A named block of code that returns a value.
+
+9. Packages:
+   - A way to organize and encapsulate related PL/SQL objects (procedures, functions, types, etc.) into a single unit.
+   - Provides modularity and reusability in code.
+
+These are just some of the key concepts in Oracle PL/SQL. Studying these concepts in detail will help you understand and write efficient PL/SQL code for database programming. I recommend referring to Oracle's official documentation and tutorials for comprehensive information and examples on each of these concepts.
+
+- Examples:-
+
+1. Scalar Data Types:
+   - NUMBER: Example: `salary NUMBER(8,2);`
+   - VARCHAR2/CHAR: Example: `first_name VARCHAR2(50);`
+   - DATE: Example: `hire_date DATE;`
+   - BOOLEAN: Example: `is_active BOOLEAN := TRUE;`
+   - BINARY_INTEGER: Example: `num_employees BINARY_INTEGER := 100;`
+
+2. Composite Data Types:
+   - RECORD/ROW: Example:
+     ```sql
+     TYPE employee_rec IS RECORD (
+       employee_id NUMBER,
+       first_name VARCHAR2(50),
+       last_name VARCHAR2(50)
+     );
+     employee employee_rec;
+     ```
+   - TABLE: Example:
+     ```sql
+     TYPE employee_table IS TABLE OF employee_rec;
+     employees employee_table;
+     ```
+
+3. User-Defined Object Types:
+   - OBJECT: Example:
+     ```sql
+     CREATE OR REPLACE TYPE person_type AS OBJECT (
+       first_name VARCHAR2(50),
+       last_name VARCHAR2(50),
+       dob DATE
+     );
+     ```
+   - TABLE OF: Example:
+     ```sql
+     CREATE OR REPLACE TYPE person_table_type AS TABLE OF person_type;
+     ```
+
+4. Collections:
+   - VARRAY: Example:
+     ```sql
+     TYPE int_array IS VARRAY(10) OF NUMBER;
+     numbers int_array := int_array(1, 2, 3, 4, 5);
+     ```
+   - NESTED TABLE: Example:
+     ```sql
+     TYPE string_table IS TABLE OF VARCHAR2(100);
+     strings string_table := string_table();
+     strings.EXTEND(3);
+     strings(1) := 'Apple';
+     strings(2) := 'Banana';
+     strings(3) := 'Orange';
+     ```
+   - INDEX BY TABLE: Example:
+     ```sql
+     TYPE string_index_table IS TABLE OF VARCHAR2(100) INDEX BY PLS_INTEGER;
+     fruits string_index_table;
+     fruits(1) := 'Apple';
+     fruits(2) := 'Banana';
+     fruits(3) := 'Orange';
+     ```
+
+5. Cursors:
+   - IMPLICIT: Example:
+     ```sql
+     DECLARE
+       CURSOR employee_cursor IS SELECT * FROM employees;
+       employee_row employees%ROWTYPE;
+     BEGIN
+       OPEN employee_cursor;
+       FETCH employee_cursor INTO employee_row;
+       CLOSE employee_cursor;
+     END;
+     ```
+   - EXPLICIT: Example:
+     ```sql
+     DECLARE
+       CURSOR employee_cursor IS SELECT * FROM employees;
+       employee_row employees%ROWTYPE;
+     BEGIN
+       OPEN employee_cursor;
+       LOOP
+         FETCH employee_cursor INTO employee_row;
+         EXIT WHEN employee_cursor%NOTFOUND;
+         -- Process employee_row
+       END LOOP;
+       CLOSE employee_cursor;
+     END;
+     ```
+
+6. PL/SQL Control Structures:
+   - IF-THEN-ELSE: Example:
+     ```sql
+     IF salary > 5000 THEN
+       bonus := 1000;
+     ELSIF salary > 3000 THEN
+       bonus := 500;
+     ELSE
+       bonus := 0;
+     END IF;
+     ```
+   - LOOP: Example:
+     ```sql
+     LOOP
+       -- Code block
+       EXIT WHEN condition;
+     END LOOP;
+     ```
+   - FOR LOOP: Example:
+     ```sql
+     FOR i IN 1..10 LOOP
+       -- Code block
+     END LOOP;
+     ```
+   - WHILE LOOP: Example:
+     ```sql
+     WHILE condition LOOP
+       -- Code block
+     END LOOP;
+     ```
+   - EXIT: Example:
+     ```sql
+     FOR i
+
+ IN 1..10 LOOP
+       EXIT WHEN i > 5;
+       -- Code block
+     END LOOP;
+     ```
+
+7. Exception Handling:
+   - TRY-CATCH: Example:
+     ```sql
+     BEGIN
+       -- Code block
+     EXCEPTION
+       WHEN no_data_found THEN
+         -- Handle no data found exception
+       WHEN others THEN
+         -- Handle other exceptions
+     END;
+     ```
+   - EXCEPTION WHEN: Example:
+     ```sql
+     BEGIN
+       -- Code block
+     EXCEPTION
+       WHEN DUP_VAL_ON_INDEX THEN
+         -- Handle duplicate value exception
+       WHEN ZERO_DIVIDE THEN
+         -- Handle divide by zero exception
+     END;
+     ```
+
+8. Procedures and Functions:
+   - PROCEDURE: Example:
+     ```sql
+     CREATE OR REPLACE PROCEDURE calculate_salary(
+       emp_id NUMBER,
+       bonus_amount NUMBER
+     ) AS
+       total_salary NUMBER;
+     BEGIN
+       SELECT salary INTO total_salary FROM employees WHERE employee_id = emp_id;
+       total_salary := total_salary + bonus_amount;
+       -- Code to update total_salary in the database
+     END;
+     ```
+   - FUNCTION: Example:
+     ```sql
+     CREATE OR REPLACE FUNCTION calculate_bonus(
+       salary NUMBER,
+       percent NUMBER
+     ) RETURN NUMBER AS
+       bonus NUMBER;
+     BEGIN
+       bonus := salary * percent;
+       RETURN bonus;
+     END;
+     ```
+
+9. Packages: Example:
+   ```sql
+   CREATE OR REPLACE PACKAGE employee_pkg AS
+     PROCEDURE get_employee_details(emp_id NUMBER);
+     FUNCTION calculate_bonus(salary NUMBER, percent NUMBER) RETURN NUMBER;
+   END;
+   /
+   CREATE OR REPLACE PACKAGE BODY employee_pkg AS
+     PROCEDURE get_employee_details(emp_id NUMBER) AS
+       -- Code to retrieve and display employee details
+     END;
+     FUNCTION calculate_bonus(salary NUMBER, percent NUMBER) RETURN NUMBER AS
+       bonus NUMBER;
+     BEGIN
+       bonus := salary * percent;
+       RETURN bonus;
+     END;
+   END;
+   ```
+
+These examples cover various concepts in Oracle PL/SQL. Exploring each concept further with detailed examples and experimenting with code will help you gain a deeper understanding. I recommend referring to Oracle's official documentation, tutorials, and online resources for comprehensive study materials and examples on each topic.
