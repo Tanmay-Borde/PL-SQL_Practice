@@ -36,5 +36,36 @@ The view owner will be able to control the privileges of the functions called fr
 The BEQUEATH DEFINER clause can be overridden by using the WITH GRANT OPTION clause when creating the view.
 It is important to use the BEQUEATH DEFINER clause carefully to ensure that the privileges of the functions called from within the view are controlled appropriately.
 
+- CTE
+A common table expression (CTE) is a temporary named result set that is created from a simple SELECT statement and can be used in a subsequent SELECT statement. Each SQL CTE is like a named query, whose result is stored in a virtual table (a CTE) to be referenced later in the main query.
+
+CTEs are a powerful tool that can be used to improve the readability and performance of SQL queries. They can be used to:
+
+Simplify complex queries by breaking them down into smaller, more manageable steps.
+Improve the performance of queries by pre-aggregating data or performing other optimizations.
+Provide a way to reuse data in multiple queries.
+To use a CTE, you first need to define it using the WITH clause. The WITH clause follows the CREATE TABLE or CREATE VIEW statement. The CTE definition is similar to a normal SELECT statement, but it cannot contain any DML statements.
+
+Once you have defined a CTE, you can reference it in a subsequent SELECT statement using the FROM clause. The CTE name will be treated as a table, and you can use it in the same way that you would use a regular table.
+
+Here is an example of a CTE:
+WITH employees AS (
+  SELECT *
+  FROM employees
+)
+SELECT *
+FROM employees
+WHERE department = 'sales';
+
+This CTE creates a temporary table called employees that contains all of the rows from the employees table. The main SELECT statement then selects all of the rows from the employees table where the department column is equal to sales.
+
+CTEs are a powerful tool that can be used to improve the readability and performance of SQL queries. They are a valuable addition to the SQL language, and they can be used to make your queries more efficient and easier to understand.
+
+Here are some of the benefits of using CTEs:
+
+Readability: CTEs can make your queries more readable by breaking them down into smaller, more manageable steps. This can make your queries easier to understand and debug.
+Performance: CTEs can improve the performance of your queries by pre-aggregating data or performing other optimizations. This can be especially beneficial for complex queries that involve a lot of data.
+Reusability: CTEs can be reused in multiple queries. This can save you time and effort by eliminating the need to rewrite the same code multiple times.
+If you are not already using CTEs, I encourage you to give them a try. They are a powerful tool that can help you write better, more efficient SQL queries.
 
 
