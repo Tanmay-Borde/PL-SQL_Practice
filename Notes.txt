@@ -14,3 +14,27 @@ ex.:
 
 - INTO clause should be used for single row query.
 - THe 'BULK COLLECT INTO' or 'OPEN FOR' clause is used for multiple-row queries.
+
+- BEQUEATH DEFINER
+If the BEQUEATH DEFINER clause is explicitly mentioned in the view, then the functions called from within the view will be called using the permissions of the view owner, regardless of the permissions of the user calling the view. This means that the user calling the view will not be able to use their own privileges to access data that is not accessible to the view owner.
+For example, consider the following view:
+CREATE VIEW my_view (id, name) AS
+SELECT id, name
+FROM my_table;
+BEQUEATH DEFINER;
+
+This view can be called by any user, but the functions called from within the view will only have access to the data that the view owner (the user who created the view) has access to.
+
+For example, if the view owner has SELECT privileges on the my_table table, but the user calling the view does not, then the user calling the view will not be able to see any data from the my_table table when they call the view.
+
+The BEQUEATH DEFINER clause can be a useful tool for controlling the privileges of functions called from within a view. However, it is important to understand how the clause works and how it can be overridden.
+
+Here are some of the implications of explicitly mentioning the BEQUEATH DEFINER clause in a view:
+
+Users calling the view will not be able to use their own privileges to access data that is not accessible to the view owner.
+The view owner will be able to control the privileges of the functions called from within the view.
+The BEQUEATH DEFINER clause can be overridden by using the WITH GRANT OPTION clause when creating the view.
+It is important to use the BEQUEATH DEFINER clause carefully to ensure that the privileges of the functions called from within the view are controlled appropriately.
+
+
+
